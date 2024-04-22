@@ -6,13 +6,16 @@ import About from "../components/About.jsx";
 import Blog from "../components/Blog.jsx";
 import BookShop from "../stall/BookShop.jsx";
 import SingleBook from "../stall/SingleBook.jsx";
-Dashboard
+
 import SimpleDashboard from "../components/Dashboard/SimpleDashboard.jsx";
 import UploadBook from "../components/Dashboard/UploadBook.jsx";
 import ManageBook from "../components/Dashboard/ManageBook.jsx";
 import Dashboard from "../components/Dashboard/Dashboard.jsx"
 import EditBook from "../components/Dashboard/EditBook.jsx";
 import Signup from "../components/Dashboard/Signup.jsx";
+import PrivateRoute from "../PrivateRoute/PrivateRoute.jsx";
+import Login from "../home/Login.jsx";
+import Logout from "../components/Logout.jsx";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -44,7 +47,7 @@ const router = createBrowserRouter([
   } ,
   {
     path:"/admin/dashboard",
-    element:<Dashboard/>,
+    element:<PrivateRoute><Dashboard/></PrivateRoute>,
     children:[
     {
       path:"/admin/dashboard",
@@ -66,6 +69,14 @@ const router = createBrowserRouter([
   },{
     path:"/sign-up",
     element:<Signup/>
+  },
+  {
+    path:"/login",
+  element:<Login/>
+  },
+  {
+    path:"/logout",
+  element:<Logout/>
   }
 ]);
 

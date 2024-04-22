@@ -31,7 +31,7 @@ const SideBar = () => {
             Login In
           </Sidebar.Item>
           <Sidebar.Item href="/logout" icon={HiTable}>
-            Sign Out
+            logout Out
           </Sidebar.Item>
         </Sidebar.ItemGroup>
         <Sidebar.ItemGroup>

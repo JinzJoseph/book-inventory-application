@@ -1,7 +1,50 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useContext } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { AuthContext } from "../../contects/AuthProvider";
+import googleLogo from "../../../assets/google-logo.svg"
+
 
 const Signup = () => {
+
+  const { createUser ,loginwithGoogle} = useContext(AuthContext);
+  const [error, setError] = useState(null); // Set initial error state to null
+  const location=useLocation()
+  const navigate=useNavigate()
+  const from = location.state?.from?.pathname || "/";
+
+  const handleSignUp = (e) => {
+    e.preventDefault();
+    const form = e.target;
+    const email = form.email.value;
+    const password = form.password.value;
+
+    createUser(email, password)
+      .then((userCredential) => {
+        const user = userCredential.user;
+        alert("sign successfull")
+        navigate(from,{replace:true})
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        setError(errorMessage); // Set error message when signup fails
+      });
+  };
+
+
+  // sign uop using google accout
+  const handleRegister=()=>{
+    loginwithGoogle().then((result)=>{
+      const user=result.user;
+      alert("sign up succesfull !")
+      navigate(from,{replace:true})
+
+    }).catch((error) => {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      setError(errorMessage); // Set error message when signup fails
+    });
+  }
   return (
     <>
       <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
@@ -17,7 +60,12 @@ const Signup = () => {
         </div>
 
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-          <form className="space-y-6" action="#" method="POST">
+          <form
+            onSubmit={handleSignUp}
+            className="space-y-6"
+            action="#"
+            method="POST"
+          >
             <div>
               <label
                 htmlFor="email"
@@ -45,7 +93,6 @@ const Signup = () => {
                 >
                   Password
                 </label>
-               
               </div>
               <div className="mt-2">
                 <input
@@ -58,7 +105,14 @@ const Signup = () => {
                 />
               </div>
             </div>
-            <p> if you have an account.please <Link to="/login"  className="text-blue-600 underline">Login</Link> Here</p>
+            {error && <p className="text-red-500">{error}</p>} {/* Display error message if there's any */}
+            <p>
+              if you have an account.please{" "}
+              <Link to="/login" className="text-blue-600 underline">
+                Login
+              </Link>{" "}
+              Here
+            </p>
 
             <div>
               <button
@@ -68,9 +122,12 @@ const Signup = () => {
                 Sign in
               </button>
             </div>
-          </form>
-
+            <hr></hr>
+            <div className="flex items-center w-full flex-col mt-5 gap-5">
+            <button onClick={handleRegister} className="block"> <img src={googleLogo} alt="image" className="w-12 h-12 inline-block"/>Login with Google</button>
+            </div>
           
+          </form>
         </div>
       </div>
     </>
